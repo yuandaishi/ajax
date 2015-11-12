@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>无标题文档</title>
+<script src="jquery-1.10.2.min.js"></script>
+<script>
+//$(function(){})	//阻塞 -> 同步
+
+//非阻塞 - 异步
+/*setTimeout(function() {
+	alert(1);
+}, 2000);
+
+alert(2);*/
+
+
+
+
+$(function(){
+	//下一页加1
+	var page=1;
+	$("#next").click(function(){
+		page+=1;
+		ajax();
+	})
+	$("#pre").click(function(){
+		if(page>0){
+			page-=1;
+		}
+		ajax();
+	})
+	$("#btn").click(function() {
+		ajax();
+	});
+	function ajax(){
+		$.ajax({
+			type:"GET",
+			url:"getPics.php?cpage="+page,
+			dataType:"json",
+//			data:"cpage",
+			success:function(data){
+				var divp = document.getElementById("addp");
+				var html = '';
+				for(var i = 0;i<data.length;i++){
+					// html += '<p>'+data[i].image+'</p>'
+					html += '<img src='+data[i].preview+'>'
+				}
+				divp.innerHTML = html;
+			}
+		})
+	}
+})
+</script>
+</head>
+
+<body>
+	<input type="button" value="按钮" id="btn" />
+	<input type="button" value="上一页" id="pre">
+	<input type="button" value="下一页" id="next">
+	<div id="addp">
+
+	</div>
+</body>
+</html>

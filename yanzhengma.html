@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>假设的验证码</title>
+	</head>
+	<body>
+		<span id="yzm" style="cursor: pointer;"></span><input type="text" name="" id="text" value="" /><a href="javascript:;" class="change">验证正误</a>
+	</body>
+	<script src="jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(function(){
+//			var numberY=Math.floor(Math.random()*10).toString()+Math.floor(Math.random()*10).toString()+Math.floor(Math.random()*10).toString()+Math.floor(Math.random()*10).toString();
+			//$("#yzm").text(numberY);
+			var con=2;
+			var pram=null;
+			$.ajax({
+				type:"get",
+				url:"yanzhengma.php?number="+pram+"&con="+con,
+				async:true,
+				success:function(data){
+					change(data.number)
+				},
+				error:function(data){
+					alert("链接服务器失败")
+				}
+			});
+			function _ajax(pram,con){
+				$.ajax({
+					type:"get",
+					url:"yanzhengma.php?number="+pram+"&con="+con,
+					async:true,
+					success:function(data){
+						//console.log("hahah");
+						if(data.isOr==1){
+							alert("验证码输入正确")
+						}else{
+							alert("验证码输入错误")
+						}
+					},
+					error:function(data){
+						console.log(data);
+						console.log("链接服务器失败");
+					}
+				});
+			}
+			//验证正误
+			$(".change").click(function(){
+				var con=1;
+				var numberN=$("#text").val();
+				//console.log(numberN);
+				_ajax(numberN,con);
+			})
+			//点击刷新
+			$("#yzm").click(function(){
+				var con=2;
+				//console.log("haha");
+					$.ajax({
+						type:"get",
+						url:"yanzhengma.php?number="+pram+"&con="+con,
+						async:true,
+						success:function(data){
+							change(data.number)
+						},
+						error:function(data){
+							alert("链接服务器失败")
+						}
+					});
+			})
+			//更新验证码
+			function change(pram){
+				//console.log(pram);
+				$("#yzm").text(pram);
+			}
+		})
+	</script>
+</html>
